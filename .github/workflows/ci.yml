@@ -1,0 +1,81 @@
+name: pyo3-python-tracing-subscriber CI
+
+on:
+  push:
+    branches:
+      - main
+      - "release/**"
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint (rustfmt + clippy)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: clippy, rustfmt
+      - name: Run lint
+        run: make lint.rust
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+      - name: Run Rust tests
+        run: |
+          cargo test
+
+  # This job runs tests, generates coverage data, and generates JUnit test
+  # results in a single test invocation and then uploads it all to Codecov.
+  # However, it doesn't print test results to stdout. If Codecov's failed test
+  # reporting is solid and we never need to see the results in the CI logs, we
+  # can delete the "normal" test step and just use this.
+  test-for-codecov:
+    name: Test (Upload to Codecov)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          toolchain: nightly
+      - name: Install `cargo llvm-cov`
+        uses: taiki-e/install-action@cargo-llvm-cov
+      - name: Run tests
+        run: |
+          cargo install cargo2junit
+          cargo llvm-cov --lcov --output-path lcov.info -- -Z unstable-options --format json --report-time | cargo2junit > junit.xml
+
+      - name: Upload coverage data to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          files: ./junit.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
