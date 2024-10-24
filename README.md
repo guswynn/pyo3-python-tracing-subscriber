@@ -1,5 +1,8 @@
 # `pyo3-python-tracing-subscriber`
 
+![Actions](https://github.com/getsentry/pyo3-python-tracing-subscriber/actions/workflows/ci.yml/badge.svg)
+[![codecov](https://codecov.io/gh/getsentry/pyo3-python-tracing-subscriber/graph/badge.svg?token=Ud70kSEpiu)](https://codecov.io/gh/getsentry/pyo3-python-tracing-subscriber)
+
 A `tracing_subscriber` layer for native extensions that forwards `tracing` data to a Python handler.
 
 See the `demo` folder for a working example.
