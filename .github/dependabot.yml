@@ -1,0 +1,8 @@
+version: 2
+updates:
+  - package-ecosystem: "cargo"
+    directory: "/" # Cargo.toml workspace in root
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 0 # Security updates only
