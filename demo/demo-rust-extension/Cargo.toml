@@ -1,0 +1,17 @@
+[package]
+name = "demo-rust-extension"
+version = "0.1.0"
+publish = false
+edition = "2021"
+
+[lib]
+name = "_bindings"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3-python-tracing-subscriber = { path = "../../" }
+tracing = "0.1"
+tracing-subscriber = "0.3.18"
+tracing-core = "0.1"
+
+pyo3 = { version = "0.22.3", features = ["extension-module", "abi3-py312"] }

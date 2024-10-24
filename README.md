@@ -2,6 +2,8 @@
 
 A `tracing_subscriber` layer for native extensions that forwards `tracing` data to a Python handler.
 
+See the `demo` folder for a working example.
+
 ### Usage
 Native extensions that use `tracing` can expose a function to Python to initialize `tracing`:
 ```rust

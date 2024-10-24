@@ -1,0 +1,22 @@
+[build-system]
+requires = ["maturin>=1.3,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "demo_rust_extension"
+authors = [{ name = "Codecov", email = "support@codecov.io" }]
+#readme = "README.md"
+requires-python = ">=3.12"
+# license = { file = "LICENSE.md" }
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+dynamic = ["version"]
+
+[tool.maturin]
+module-name = "demo_rust_extension._bindings"
+manifest-path = "Cargo.toml"
+python-source = "python"
