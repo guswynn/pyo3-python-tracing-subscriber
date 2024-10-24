@@ -1,0 +1,15 @@
+[package]
+name = "pyo3-python-tracing-subscriber"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tracing-subscriber = "0.3.18"
+tracing-core = "0.1"
+tracing-serde = "0.1"
+serde_json = "1.0"
+
+pyo3 = { version = "0.22.3" }
+
+[dev-dependencies]
+tracing = "0.1"
